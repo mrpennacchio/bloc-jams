@@ -26,5 +26,5 @@
      revealFirstPoint();
      revealSecondPoint();
      revealThirdPoint();
- 
+  
  };

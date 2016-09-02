@@ -92,7 +92,7 @@ body {
     content:" ";
     display: table;
 }
-
+ 
 .clearfix::after{
     clear:both
 }
