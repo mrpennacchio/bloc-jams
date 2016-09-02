@@ -26,5 +26,9 @@
      revealFirstPoint();
      revealSecondPoint();
      revealThirdPoint();
+<<<<<<< HEAD
  
+=======
+  
+>>>>>>> checkpoint-8-DOM-animation
  };
