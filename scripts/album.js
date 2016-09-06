@@ -28,6 +28,22 @@
          { title: 'Wrong phone number', duration: '2:15'}
      ]
  };
+// And another example Album for assignment
+ var albumAnthony = {
+     title: 'Bloc-Hop',
+     artist: 'Bloc-Party!',
+     label: 'EM',
+     year: '2030',
+     albumArtUrl: 'assets/images/album_covers/18.png',
+     songs: [
+         { title: 'Bloc and Roll', duration: '2:01' },
+         { title: 'Bloc-Stop', duration: '4:23' },
+         { title: 'Lean with it Bloc with it', duration: '5:20'},
+         { title: 'God Gave Bloc and Roll to you', duration: '3:21' },
+         { title: 'Bloc and Roll all Night', duration: '2:20'}
+     ]
+ };
+
 
 var createSongRow = function(songNumber, songName, songLength) {
      var template =
@@ -41,14 +57,15 @@ var createSongRow = function(songNumber, songName, songLength) {
      return template;
  };
 
- var setCurrentAlbum = function(album) {
-   
+
      var albumTitle = document.getElementsByClassName('album-view-title')[0];
      var albumArtist = document.getElementsByClassName('album-view-artist')[0];
      var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
      var albumImage = document.getElementsByClassName('album-cover-art')[0];
      var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
  
+ var setCurrentAlbum = function(album) {
+   
     
      albumTitle.firstChild.nodeValue = album.title;
      albumArtist.firstChild.nodeValue = album.artist;
@@ -65,5 +82,17 @@ var createSongRow = function(songNumber, songName, songLength) {
  };
  
  window.onload = function() {
-     setCurrentAlbum(albumMarconi);
+     setCurrentAlbum(albumPicasso);
+     
+     var albums = [albumPicasso, albumMarconi, albumAnthony]
+     var number = 1;
+    
+     albumImage.addEventListener("click", function(event){
+         setCurrentAlbum(albums[number]);
+         number ++;
+            if (number == albums.length){
+             number = 0;
+         }
+    
+     });
  };
