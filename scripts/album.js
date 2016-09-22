@@ -1,3 +1,40 @@
+var currentSoundFile = {
+    bind: function() {},
+    stop: function() {},
+    setTime: function() {},
+    setVolume: function() {},
+    getDuration: function() {},
+    getTime: function() {}
+};
+
+var setCurrentTimeInPlayerBar = function(){
+        currentSoundFile.bind("timeupdate", function(){
+            var timer = buzz.toTimer(currentSoundFile.getTime());
+            $('.current-time').html(timer);
+            
+        });
+    };
+
+var filterTimeCode = function(timeInSeconds){ 
+    return buzz.toTimer(timeInSeconds);
+};
+
+        
+        /*var durationSec = $('.song-item-duration').html();
+        var duration = parseFloat(durationSec);
+        var minutes = Math.floor(duration / 60);
+        var seconds = Math.floor(duration - minutes * 60);
+        var newTime = minutes + ":" + seconds;
+        for (var i = 0; i < currentAlbum.songs.length; i++){
+            var allDurations = currentAlbum.songs[i].duration;
+        console.log(currentAlbum.songs[i].duration);
+        };
+        $('.song-item-duration').html(newTime);*/
+       /* };*/
+
+
+
+
 var setupSeekBars = function() {
      var $seekBars = $('.player-bar .seek-bar');
  
@@ -46,8 +83,9 @@ var updateSeekBarWhileSongPlays = function() {
             var $seekBar = $('.seek-control .seek-bar');
             
             updateSeekPercentage($seekBar, seekBarFillRatio);
+            
         });
-    }
+    };
 };
 
  var updateSeekPercentage = function($seekBar, seekBarFillRatio) {
@@ -68,9 +106,7 @@ var seek = function(time) {
 }
 
 var setSong = function(songNumber) {
-    if (currentSoundFile) {
-        currentSoundFile.stop();
-    }
+    currentSoundFile.stop();
     currentlyPlayingSongNumber = parseInt(songNumber);
     currentSongFromAlbum = currentAlbum.songs[songNumber -1];
     
@@ -79,6 +115,8 @@ var setSong = function(songNumber) {
         preload: true
     });
     setVolume(currentVolume);
+    setCurrentTimeInPlayerBar();
+    
 };
 
 var setVolume = function(volume) {
@@ -91,12 +129,19 @@ var getSongNumberCell = function(number){
     return $('.song-item-number[data-song-number="' + number + '"]');
 };
 
+var setTotalTime = function() {
+    currentSoundFile.bind("loadedmetadata", function () {
+         console.log('meta loaded');
+        $('.total-time').html(buzz.toTimer(currentSoundFile.getDuration()));
+     });
+};
+
 var createSongRow = function(songNumber, songName, songLength) {
      var template =
         '<tr class="album-view-song-item">'
       + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
       + '  <td class="song-item-title">' + songName + '</td>'
-      + '  <td class="song-item-duration">' + songLength + '</td>'
+      + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
       + '</tr>'
       ;
  
@@ -141,7 +186,11 @@ var createSongRow = function(songNumber, songName, songLength) {
         }
         }
         
+        setTotalTime();
+        currentSoundFile.bind('timeupdate', function(e) {
+        $('current-time').html(buzz.toTimer(this.getTime()));
         
+      });
     };
 
 
@@ -257,11 +306,13 @@ var previousSong = function(){
 };
 
 
+
 var updatePlayerBarSong = function(){
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
+    
 };
 
 //album button templates
@@ -272,15 +323,19 @@ var playerBarPauseButton = '<span class="ion-pause"></span>';
 var currentAlbum = null;
 var currentlyPlayingSongNumber = null;
 var currentSongFromAlbum = null;
-var currentSoundFile = null;
+
 var currentVolume = 80;
 
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
+
+
 
  $(document).ready(function() {
      setCurrentAlbum(albumPicasso);
      setupSeekBars();
      $previousButton.click(previousSong);
      $nextButton.click(nextSong);
+//     filterTimeCode();
+     
  });
